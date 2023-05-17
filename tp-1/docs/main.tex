@@ -1,0 +1,416 @@
+\documentclass{article}
+
+\input{setup}
+
+\begin{document}
+
+\CAPA{Trabalho Prático I}{BCC266 - Organização de Computadores}{Caio Lucas Pereira da Silva, Vinicius Nunes dos Anjos, Thalles Felipe Rodrigues de Almeida Santos}{Pedro Henquire Lopes Silva}
+
+
+\section{Introdução}
+
+\DESCRICAO{}
+Para este trabalho é necessário entregar o código em C e um relatório referente ao que foi desenvolvido. O algoritmo a ser desenvolvido é o de uma máquina universal.
+
+As máquinas universais são dispositivos teóricos capazes de simular qualquer processo computacional. Elas foram propostas pela primeira vez por Alan Turing em 1936, como parte de seu trabalho sobre a decidibilidade matemática. Ele mostrou que uma máquina universal, também conhecida como máquina de Turing, poderia ser programada para realizar qualquer tarefa computacional, desde o cálculo simples até a resolução de problemas complexos. Isso levou à criação da teoria da computação, que é hoje uma área fundamental da ciência da computação.
+
+A codificação deve ser feita em C, usando somente a biblioteca padrão da GNU, sem o uso de bibliotecas adicionais. Além disso, deve-se usar um dos padrões: ANSI C 89 ou ANSI C 99.
+
+\subsection{Especificações do problema}
+
+\DESCRICAO{}
+Este código simula uma máquina universal, que é capaz de simular qualquer processo computacional. O problema específico que ele tenta resolver é a execução de instruções em uma máquina virtual, que é uma representação de uma máquina real. O programa pode ser executado passando dois argumentos na linha de comando: o tipo de instrução (random ou file) e o tamanho da RAM (se for random) ou o nome do arquivo de instruções (se for file).
+
+\subsection{Considerações iniciais}
+
+Algumas ferramentas foram utilizadas durante a criação deste projeto:
+
+\begin{itemize}
+\item Ambiente de desenvolvimento do código fonte: Visual Studio Code. \footnote{VScode está disponível em \url{https://code.visualstudio.com/}}
+\item Linguagem utilizada: C.
+\item Ambiente de desenvolvimento da documentação: Overleaf \LaTeX. \footnote{Disponível em \url{https://www.overleaf.com/}}
+\end{itemize}
+
+\subsection{Ferramentas utilizadas}
+Algumas ferramentas foram utilizadas para testar a implementação, como:
+\begin{itemize}
+\item[-] \textit{Live Share}: ferramenta usada para \textit{pair programming} à distância.
+\item[-] \textit{Valgrind}: ferramentas de análise dinâmica do código.
+\end{itemize}
+
+\subsection{Especificações da máquina}
+A máquina onde o desenvolvimento e os testes foram realizados possui a seguinte configuração:
+\begin{itemize}
+   \item[-] Processador: AMD Ryzen 5-5500U.
+	\item[-] Memória RAM: 8GB.
+              \item[-] Sistema Operacional: Linux Pop!\_OS.
+\end{itemize}
+
+\subsection{Instruções de compilação e execução}
+
+Para a compilação do projeto, basta digitar o seguinte comando para rodar o arquivo \textit{Makefile} disponível:
+
+\begin{tcolorbox}[title=Compilando o projeto,width=\linewidth]
+    make
+\end{tcolorbox}
+
+Usou-se para a compilação as seguintes opções:
+\begin{itemize}
+    \item [-] \emph{-o}: para definir o arquivo de saída.
+    \item [-] \emph{-g}: para compilar com informação de depuração e ser usado pelo Valgrind.
+    \item [-] \emph{-Wall}: para mostrar todos os possível \emph{warnings} do código.
+    \item [-] \emph{-c}: para compilação do código e geração dos arquivos objetos.
+\end{itemize}
+
+Para a execução do programa basta digitar :
+\begin{tcolorbox}[title=,width=\linewidth]
+    ./exe random 'tamanhoRam'
+\end{tcolorbox}
+
+ou
+
+\begin{tcolorbox}[title=,width=\linewidth]
+    ./exe file 'arquivo'
+\end{tcolorbox}
+
+Onde o arquivo de entrada contém o tamanho da matriz e seus valores.
+
+\clearpage
+\section{Desenvolvimento}
+
+\DESCRICAO{}
+O desenvolvimento foi realizado utilizando da técnica de pair programming, onde todos os integrantes do grupo programaram e participaram ativamente do código ao mesmo tempo. O uso das ferramentas Live Share para o compartilhamento de código e do Discord para a comunicação em equipe foi o que viabilizou o uso da técnica citada.
+
+\subsection{Criando as operações}
+
+\DESCRICAO{}
+A primeira função é a de soma, sendo ela usada de base para outras funções futuras.  Ela simplesmente recebe dois números inteiros como entrada e retorna a soma deles.
+
+\hfill \breakline
+
+\noindent A seguir o código da função:
+\begin{lstlisting}[caption={Função de soma.},label={lst:cod2},language=C]
+int sum(int value1, int value2)
+{
+  return value1 + value2;
+}
+ \end{lstlisting}
+ 
+  A função de subtração é uma função simples que recebe dois números inteiros como entrada e retorna o valor do primeiro pelo segundo subtraído.
+  
+ \hfill\breakline
+  
+ \noindent A seguir o código da função:
+ \begin{lstlisting}[caption={Função de subtração.},label={lst:cod2},language=C]
+int sub(int value1, int value2)
+{
+  return value1 - value2;
+}
+ \end{lstlisting}
+
+A seguir temos as funções derivadas destas duas primeiras, começando pela multiplicação. A função de multiplicação é uma função que recebe dois números inteiros como entrada e retorna o resultado da multiplicação entre eles. Ela inicializa uma variável "result" com o valor 0 e imprime os valores de entrada. Em seguida, ela verifica se algum dos valores de entrada é 0 e, se for, retorna 0 imediatamente.
+
+Em seguida, ela cria duas variáveis “absValue1” e “absValue2” que armazenam os valores absolutos de “value1” e “value2”, respectivamente. Isso é feito para garantir que a multiplicação seja realizada com números positivos, independentemente do sinal dos valores de entrada.
+
+Então, ela usa um loop “for” para adicionar “absValue1” a “result” o número de vezes de “absValue2”. Isso simula a multiplicação.
+
+Por fim, ela verifica se algum dos valores de entrada é negativo e, se for, inverte o sinal de “result” antes de retorná-lo.
+
+\hfill\breakline
+
+\noindent A seguir o código da função:
+ \begin{lstlisting}[caption={Função de multiplicação.},label={lst:cod3},language=C]
+int mult(int value1, int value2)
+{
+  int result = 0;
+
+  // Se um dos valores for 0, o resultado e 0.
+  if (value1 == 0 || value2 == 0) 
+    return 0;
+
+  // Alterando os sinais se necessario.
+  int absValue1 = (value1 < 0) ? -value1 : value1;
+  int absValue2 = (value2 < 0) ? -value2 : value2;
+
+  for (int i = 0; i < absValue2; i++)
+  {
+    result = sum(result, absValue1);
+  }
+
+  // Alterando os sinais do resultado.
+  result = ((value1 < 0 && value2 > 0) || (value1 > 0 && value2 < 0)) ? -result : result;
+
+  return result;
+}
+ \end{lstlisting}
+ A função de divisão é uma função que recebe dois números inteiros como entrada e retorna o resultado da divisão do primeiro pelo segundo. Ela inicializa uma variável “result” com o valor 0.
+
+Em seguida, ela cria duas variáveis “absValue1” e “absValue2” que armazenam os valores absolutos de “value1” e “value2”, respectivamente. Isso é feito para garantir que a divisão seja realizada com números positivos, independentemente do sinal dos valores de entrada.
+
+Então, ela usa um loop “while” para subtrair “absValue2” de “absValue1” até que “absValue1” seja menor que “absValue2”. A cada iteração do loop, ela adiciona 1 à “result”, pois essa é a contagem de vezes que "absValue2" foi subtraído de “absValue1”. Isso simula a divisão.
+
+Por fim, ela verifica se algum dos valores de entrada é negativo e, se for, inverte o sinal de “result” antes de retorná-lo.
+
+\hfill\breakline
+
+ \noindent A seguir o código da função:
+ \begin{lstlisting}[caption={Função de divisão.},label={lst:cod4},language=C]
+int division(int value1, int value2)
+{
+  int result = 0;
+
+  int absValue1 = (value1 < 0) ? -value1 : value1;
+  int absValue2 = (value2 < 0) ? -value2 : value2;
+
+  while (absValue1 >= absValue2)
+  {
+    absValue1 = sub(absValue1, absValue2);
+    result = sum(result, 1);
+  }
+
+  result = ((value1 < 0 && value2 > 0) || (value1 > 0 && value2 < 0)) ? -result : result;
+
+  return result;
+}
+ \end{lstlisting}
+ A função de exponenciação é uma função que recebe dois números inteiros como entrada e retorna o resultado da exponenciação do primeiro número elevado ao segundo. Ela inicializa uma variável “result” com o valor 1.
+
+Então, ela usa um loop “for” para multiplicar “value1” com “result” o número de vezes de “value2”. Isso simula a exponenciação.
+
+Por fim, ela retorna “result” como o resultado da exponenciação.
+
+
+\hfill\breakline
+
+ \noindent A seguir o código da função:
+ \begin{lstlisting}[caption={Função de exponenciação.},label={lst:cod4},language=C]
+int expo(int value1, int value2)
+{
+  int result = 1;
+
+  for (int i = 0; i < value2; i++)
+  {
+    result = mult(result, value1);
+  }
+
+  return result;
+}
+ \end{lstlisting}
+ A função Fibonacci é uma função que recebe um inteiro “stop” como entrada e retorna o n-ésimo termo da sequência de Fibonacci. Ela inicializa três variáveis inteiras “primary”,  “secondary” e “result” com os valores 0, 1 e 0, respectivamente.
+
+Então, ela usa um loop “for” para calcular o próximo termo da sequência de Fibonacci, adicionando “primary” e “secondary” e armazenando o resultado em “result”. Então, ela atualiza “primary” para “secondary” e “secondary” para “result”. “stop - 2” vezes, já que os dois primeiros termos são 0 e 1.
+
+Por fim, ela retorna “result” como o n-ésimo termo da sequência de Fibonacci.
+
+\hfill\breakline
+
+ \noindent A seguir o código da função:
+ \begin{lstlisting}[caption={Função de Fibonacci.},label={lst:cod4},language=C]
+int fibo(int stop)
+{
+  int primary = 0;
+  int secondary = 1;
+  int result = 0;
+
+  for (int i = 0; i < stop - 2; i++)
+  {
+    result = sum(primary, secondary);
+    primary = secondary;
+    secondary = result;
+  }
+
+  return result;
+}
+ \end{lstlisting}
+ \clearpage
+
+\section{Experimetos}
+\DESCRICAO{}
+
+Para os experimêntos, foram feitos três testes no modo random e três usando o modo file. Como os valores são aleatórios, o uso de memória e o tempo de execução variam bastante. O hardware usado foi o especificado na introdução.
+
+Além do mais, para saber o tempo de execução e o uso de memória foi utilizado o \textit{valgrind} e o \textit{time} do linux. Cada entrada foi executada três vezes. 
+Vale ressaltar que para cada entrada, o código foi executado duas vezes, uma usando o comando \textit{time} e outra usando o comando \textit{valgrind}. Isso foi feito pois caso os dois fossem executados juntos, o tempo de execução seria afetado.
+
+A saída do código também pode variar muito, mas a título de exemplo, seria algo do tipo:
+ \begin{lstlisting}[caption={Exemplo de saída.},label={lst:cod5},language=C]
+Iniciando a máquina...
+  > RAM         [ 0 ] : 118
+                [ 1 ] : 107
+                [ 2 ] : 137
+                [ 3 ] : 118
+                [ 4 ] : 95
+                [ 5 ] : 73
+                [ 6 ] : 109
+                [ 7 ] : 73
+                [ 8 ] : 80
+                [ 9 ] : 106
+  > Exponenciando RAM[9] (106) com RAM[0] (118) e salvando na RAM[6] (0).
+  > Dividindo RAM[3] (118) com RAM[0] (118) e salvando na RAM[4] (1).
+  > Levando informação (1) para a RAM[6].
+  > RAM         [ 0 ] : 118
+                [ 1 ] : 107
+                [ 2 ] : 137
+                [ 3 ] : 118
+                [ 4 ] : 1
+                [ 5 ] : 73
+                [ 6 ] : 1
+                [ 7 ] : 73
+                [ 8 ] : 80
+                [ 9 ] : 106
+ \end{lstlisting}
+
+
+\subsection{Modo random}
+\noindent \textbf{Entrada 1}
+O primeiro teste foi feito passando o valor de 100 para a RAM com o seguinte comando:
+
+\begin{tcolorbox}[title=Comando da entrada 1 do modo random,width=\linewidth]
+   	\$ time ./exe random 100
+    \$ valgring ./exe random 100
+\end{tcolorbox}
+
+O tempo de execução do código foi de 0.137 segundos e o uso de memória foi de 1,584	bytes.
+
+\hfill\break
+
+\noindent \textbf{Entrada 2}
+O segundo teste foi feito passando o valor de 500 para a RAM com o seguinte comando:
+
+\begin{tcolorbox}[title=Comando da entrada 2 do modo random,width=\linewidth]
+   	\$ time ./exe random 500
+    \$ valgring ./exe random 500
+\end{tcolorbox}
+
+O tempo de execução do código foi de 0.145 segundos e o uso de memória foi de 3,184	bytes.
+
+\hfill\break
+
+\noindent \textbf{Entrada 3}
+O terceiro teste foi feito passando o valor de 1000 para a RAM com o seguinte comando:
+
+\begin{tcolorbox}[title=Comando da entrada 2 do modo random,width=\linewidth]
+   	\$ time ./exe random 1000
+    \$ valgring ./exe random 1000
+\end{tcolorbox}
+
+O tempo de execução do código foi de 0.147 segundos e o uso de memória foi de 5,184	bytes.
+
+
+\subsection{Modo file}
+\noindent \textbf{Entrada 1}
+O primeiro teste foi feito passando o seguinte arquivo como entrada:
+
+ \begin{lstlisting}[caption={Arquivo de entrada 1.},label={lst:cod6},language=C]
+10 3
+3 1 2 3
+4 4 5 6
+5 7 8 9
+ \end{lstlisting}
+
+Para executar o código, os seguintes comandos foram rodados:
+\begin{tcolorbox}[title=Comando da entrada 1 do modo file,width=\linewidth]
+   	\$ time ./exe file ./tests/test1.txt
+    \$ valgring ./exe file ./tests/test1.txt
+\end{tcolorbox}
+
+O tempo de execução do código foi de 0.131 segundos e o uso de memória foi de 5,680	bytes.
+
+\hfill\break
+
+\noindent \textbf{Entrada 2}
+O segundo teste foi feito passando o seguinte arquivo como entrada:
+
+ \begin{lstlisting}[caption={Arquivo de entrada 2.},label={lst:cod7},language=C]
+5 5
+1 2 3 4
+4 3 2 1
+3 2 1 0
+6 4 2 4
+5 3 2 1
+ \end{lstlisting}
+ 
+ Para executar o código, os seguintes comandos foram rodados:
+\begin{tcolorbox}[title=Comando da entrada 2 do modo file,width=\linewidth]
+   	\$ time ./exe file ./tests/test2.txt
+    \$ valgring ./exe file ./tests/test2.txt
+\end{tcolorbox}
+
+O tempo de execução do código foi de 0.135 segundos e o uso de memória foi de 5,692	bytes.
+
+\hfill\break
+
+\noindent \textbf{Entrada 3}
+O terceiro teste foi feito passando o seguinte arquivo como entrada:
+
+ \begin{lstlisting}[caption={Arquivo de entrada 3.},label={lst:cod8},language=C]
+20 2
+2 19 1 0
+4 9 3 4
+ \end{lstlisting}
+ 
+ Para executar o código, os seguintes comandos foram rodados:
+\begin{tcolorbox}[title=Comando da entrada 3 do modo file,width=\linewidth]
+   	\$ time ./exe file ./tests/test3.txt
+    \$ valgring ./exe file ./tests/test3.txt
+\end{tcolorbox}
+
+O tempo de execução do código foi de 0.129 segundos e o uso de memória foi de 5,704	bytes.
+
+\clearpage
+\section{Resultados}
+A seguir está um resumo dos resultados obtidos a partir de cada entrada, bem como os pontos fortes e fracos do código-fonte do trabalho.
+
+\subsection{Resumo dos experimentos}
+
+\noindent \textbf{Modo random:}
+\begin{table}[!htb]
+    \centering
+    \begin{tabular}{|c | c | c |}
+        \hline
+        Entrada & Tempo de execução (em segundos) & Consumo de memória (em bytes) \\\hline
+        1 & 0.137 & 1,584  \\\hline
+        2 & 0.145 & 3,184 \\\hline
+        3 & 0.147 & 5,184 \\\hline
+    \end{tabular}
+    \caption{\label{tab:widgets}Resumo dos testes da entrada 1.}
+\end{table}
+
+\noindent \textbf{Modo file:}
+\begin{table}[!htb]
+    \centering
+    \begin{tabular}{|c | c | c |}
+        \hline
+        Teste & Tempo de execução (em segundos) & Consumo de memória (em bytes) \\\hline
+        Teste1 & 0.131 & 5,680  \\\hline
+        Teste 2 & 0.135 & 5,692 \\\hline
+        Teste 3 & 0.129 & 5,704 \\\hline
+    \end{tabular}
+    \caption{\label{tab:widgets}Resumo dos testes da entrada 2.}
+\end{table}
+
+\subsection{Pontos fortes}
+\begin{itemize}
+\item O código está bem escrito e indentado, o tornando fácil de ler e entender.
+\item As operações estão todas separadas em funções.
+\item O switch não repete código desnecessário.
+\end{itemize}
+
+\subsection{Pontos fracos}
+\begin{itemize}
+\item O código não lida com números flutuantes.
+\item Divisão de um número menor por um maior retorna zero.
+\item Exponenciação pode falhar quando lidando com números muito grandes
+\end{itemize}
+
+\clearpage
+\section{Considerações Finais}
+\DESCRICAO{}
+
+Neste trabalho prático, analisamos uma implementação simples de uma máquina virtual que pode realizar operações aritméticas básicas, como adição, subtração, multiplicação, divisão e exponenciação, bem como uma sequência de fibonacci. O código também inclui funções para inicializar e executar a máquina virtual e interrompê-la. É importante destacar que a máquina universal desenvolvida neste estudo é apenas um exemplo da teoria da computação e ainda há muito espaço para aperfeiçoamento e novas descobertas.
+
+Em resumo, este estudo demonstrou a viabilidade da programação e teste de uma máquina universal, o que é um passo importante na compreensão da capacidade de computação e suas limitações. A máquina universal desenvolvida é apenas um exemplo da teoria da computação, e ainda há muito espaço para aperfeiçoamento e novas descobertas.
+
+\clearpage
+
+\end{document}

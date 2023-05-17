@@ -1,0 +1,4 @@
+ramSize numberOfInstructions
+op1 address1 address2 address3
+op2 address1 address2 address3
+...
